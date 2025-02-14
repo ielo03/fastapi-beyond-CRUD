@@ -36,12 +36,24 @@ jobs:
                https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }} \
                -d '{"state":"closed"}'
 
+      - name: Get PR Author Email
+        if: steps.commitlint.outcome == 'failure'
+        id: get_author_email
+        run: |
+          AUTHOR_EMAIL=$(git log -1 --pretty=format:'%ae')
+          echo "PR_AUTHOR_EMAIL=$AUTHOR_EMAIL" >> $GITHUB_ENV
+
       - name: Send notification email if commitlint fails
         if: steps.commitlint.outcome == 'failure'
         run: |
           curl --request POST \
-               --url https://api.sendgrid.com/v3/mail/send \
-               --header "Authorization: Bearer ${{ secrets.SENDGRID_API_KEY }}" \
-               --header 'Content-Type: application/json' \
-               --data '{"personalizations": [{"to": [{"email": "ctdobson@dons.usfca.edu"}]}],"from": {"email": "colbytdobson@gmail.com"},"subject": "Sending with SendGrid is Fun","content": [{"type": "text/plain", "value": "and easy to do anywhere, even with cURL"}]}'
-        
+            --url https://api.sendgrid.com/v3/mail/send \
+            --header "Authorization: Bearer ${{ secrets.SENDGRID_API_KEY }}" \
+            --header 'Content-Type: application/json' \
+            --data '{
+              "personalizations": [{
+                "to": [{"email": "'$PR_AUTHOR_EMAIL'"}]
+              }],
+              "from": {"email": "colbytdobson@gmail.com"},
+              "template_id": "'${{ secrets.SENDGRID_TEMPLATE_ID }}'"
+            }'
