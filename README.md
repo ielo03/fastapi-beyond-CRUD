@@ -1,5 +1,14 @@
 # FastAPI Beyond CRUD 
 
+## Colby's HW7 info
+
+Configure .env file based off .env.example and variables Colby can give to you separately like the SendGrid API key.  
+Run docker compose up  
+Enjoy your books API!  
+(Also updated instructions below)
+
+## ----------------
+
 This is the source code for the [FastAPI Beyond CRUD](https://youtube.com/playlist?list=PLEt8Tae2spYnHy378vMlPH--87cfeh33P&si=rl-08ktaRjcm2aIQ) course. The course focuses on FastAPI development concepts that go beyond the basic CRUD operations.
 
 For more details, visit the project's [website](https://jod35.github.io/fastapi-beyond-crud-docs/site/).
@@ -50,29 +59,16 @@ Ensure you have the following installed:
     cp .env.example .env
     ```
 
-6. Run database migrations to initialize the database schema:
-    ```bash
-    alembic upgrade head
-    ```
-
-7. Open a new terminal and ensure your virtual environment is active. Start the Celery worker (Linux/Unix shell):
-    ```bash
-    sh runworker.sh
-    ```
-
 ## Running the Application
 Start the application:
 
 ```bash
-fastapi dev src/
-```
-Alternatively, you can run the application using Docker:
-```bash
-docker compose up -d
+docker compose up
 ```
 ## Running Tests
 Run the tests using this command
 ```bash
+pip install pytest
 pytest
 ```
 
