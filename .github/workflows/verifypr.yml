@@ -52,7 +52,7 @@ jobs:
             --header 'Content-Type: application/json' \
             --data '{
               "personalizations": [{
-                "to": [{"email": "'$PR_AUTHOR_EMAIL'"}]
+                "to": [{"email": "$PR_AUTHOR_EMAIL"}]
               }],
               "from": {"email": "colbytdobson@gmail.com"},
               "template_id": "'${{ secrets.SENDGRID_TEMPLATE_ID }}'"
