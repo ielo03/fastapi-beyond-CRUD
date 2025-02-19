@@ -6,9 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -24,8 +23,48 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run tests
-        run: pytest
+        id: run_tests
+        run: |
+          pytest
 
-      # Optional: Build Docker image
       - name: Build Docker image
-        run: docker build -t myapp:latest .
+        if: success()
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/myapp:latest .
+
+      - name: Log in to GitHub Container Registry
+        if: success()
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Docker image
+        if: success()
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/myapp:latest
+
+  notify-failure:
+    if: failure()
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send failure notification via SendGrid
+        run: |
+          curl --request POST \
+            --url https://api.sendgrid.com/v3/mail/send \
+            --header "Authorization: Bearer ${{ secrets.SENDGRID_API_KEY }}" \
+            --header "Content-Type: application/json" \
+            --data '{
+              "personalizations": [{
+                "to": [{"email": "ctdobson@dons.usfca.edu"}],
+                "subject": "Nightly Build Failed"
+              }],
+              "from": {"email": "colbytdobson@gmail.com"},
+              "template_id": "'"d-d2e76e4034834b0f8a00f202f2f0649a"'",
+              "content": [{
+                "type": "text/plain",
+                "value": "The nightly build for commit '${{ github.sha }}' on main has failed. Please review the logs for details."
+              }]
+            }'
