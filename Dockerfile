@@ -10,10 +10,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+RUN chmod +x entrypoint.sh
+
 RUN chmod +x /app/entrypoint.sh
 
 EXPOSE 8000
 
 ENV HOST 0.0.0.0
 
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["sh", "-c", "chmod +x /app/entrypoint.sh && exec /app/entrypoint.sh"]

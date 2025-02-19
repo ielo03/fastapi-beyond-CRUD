@@ -54,9 +54,8 @@ services:
      - app-network
 
   celery:
-    build: .
 
-    command: celery -A src.celery_tasks.c_app worker --loglevel=INFO
+    build: .
 
     volumes:
       - .:/app
@@ -70,7 +69,7 @@ services:
     networks:
       - app-network
 
-    entrypoint: ["celery", "-A", "src.celery_tasks.c_app", "worker", "--loglevel=INFO"]
+    entrypoint: [ "celery", "-A", "src.celery_tasks.c_app", "worker", "--loglevel=INFO" ]
 
 volumes:
   db-data:
