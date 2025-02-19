@@ -59,13 +59,8 @@ jobs:
             --header "Content-Type: application/json" \
             --data '{
               "personalizations": [{
-                "to": [{"email": "ctdobson@dons.usfca.edu"}],
-                "subject": "Nightly Build Failed"
+                "to": [{"email": "ctdobson@dons.usfca.edu"}]
               }],
               "from": {"email": "colbytdobson@gmail.com"},
-              "template_id": "'"d-d2e76e4034834b0f8a00f202f2f0649a"'",
-              "content": [{
-                "type": "text/plain",
-                "value": "The nightly build for commit '${{ github.sha }}' on main has failed. Please review the logs for details."
-              }]
+              "template_id": "'"d-d2e76e4034834b0f8a00f202f2f0649a"'"
             }'
