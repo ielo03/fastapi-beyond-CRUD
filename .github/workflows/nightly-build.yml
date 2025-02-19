@@ -8,6 +8,18 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: "postgresql+asyncpg://postgres:testpass@db:5432/bookly"
+      JWT_SECRET: "${{ secrets.JWT_SECRET }}"
+      JWT_ALGORITHM: "HS256"
+      MAIL_USERNAME: "apikey"
+      MAIL_PASSWORD: "${{ secrets.SENDGRID_API_KEY }}"
+      MAIL_FROM: "colbytdobson@gmail.com"
+      MAIL_PORT: "587"
+      MAIL_SERVER: "smtp.sendgrid.net"
+      MAIL_FROM_NAME: "Colby Dobson"
+      DOMAIN: "colbytdobson.com"
+      REDIS_URL: "redis://redis:6379"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
