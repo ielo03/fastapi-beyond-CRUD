@@ -45,7 +45,8 @@ jobs:
             --header 'Content-Type: application/json' \
             --data '{
               "personalizations": [{
-                "to": [{"email": "ctdobson@dons.usfca.edu"}]
+                "to": [{"email": "ctdobson@dons.usfca.edu"}],
+                "subject": "PR Request Failed Verification and Closed"
               }],
               "from": {"email": "colbytdobson@gmail.com"},
               "template_id": "'${{ secrets.SENDGRID_TEMPLATE_ID }}'"
